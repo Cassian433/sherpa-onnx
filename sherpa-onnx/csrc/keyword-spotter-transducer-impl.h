@@ -10,6 +10,7 @@
 #include <regex>  // NOLINT
 #include <string>
 #include <sstream>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -284,7 +285,7 @@ class KeywordSpotterTransducerImpl : public KeywordSpotterImpl {
     if (!EncodeKeywords(is, sym_, &keywords_id_, &keywords_, &boost_scores_,
                         &thresholds_)) {
       SHERPA_ONNX_LOGE("Encode keywords failed.");
-      SHERPA_ONNX_EXIT(-1);
+      throw std::runtime_error("Encode keywords failed.");
     }
     keywords_graph_ = std::make_shared<ContextGraph>(
         keywords_id_, config_.keywords_score, config_.keywords_threshold,
@@ -309,7 +310,8 @@ class KeywordSpotterTransducerImpl : public KeywordSpotterImpl {
       SHERPA_ONNX_LOGE("Open keywords file failed: '%s'",
                        config_.keywords_file.c_str());
 #endif
-      SHERPA_ONNX_EXIT(-1);
+      throw std::runtime_error("Open keywords file failed: '" +
+                               config_.keywords_file + "'");
     }
     InitKeywords(is);
 #endif
@@ -331,7 +333,8 @@ class KeywordSpotterTransducerImpl : public KeywordSpotterImpl {
       SHERPA_ONNX_LOGE("Open keywords file failed: '%s'",
                        config_.keywords_file.c_str());
 #endif
-      SHERPA_ONNX_EXIT(-1);
+      throw std::runtime_error("Open keywords file failed: '" +
+                               config_.keywords_file + "'");
     }
     InitKeywords(is);
   }

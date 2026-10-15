@@ -92,11 +92,17 @@ JNIEXPORT jlong JNICALL Java_com_k2fsa_sherpa_onnx_KeywordSpotter_newFromAsset(
 
   SHERPA_ONNX_LOGE("config:\n%s", config.ToString().c_str());
 
-  auto kws = new sherpa_onnx::KeywordSpotter(
+  sherpa_onnx::KeywordSpotter *kws = nullptr;
+  try {
+    kws = new sherpa_onnx::KeywordSpotter(
 #if __ANDROID_API__ >= 9
-      mgr,
+        mgr,
 #endif
-      config);
+        config);
+  } catch (const std::exception &e) {
+    RethrowCxxExceptionAsJava(env, e, "Failed to create KeywordSpotter");
+    return 0;
+  }
 
   return (jlong)kws;
 }
@@ -119,7 +125,13 @@ JNIEXPORT jlong JNICALL Java_com_k2fsa_sherpa_onnx_KeywordSpotter_newFromFile(
     return 0;
   }
 
-  auto kws = new sherpa_onnx::KeywordSpotter(config);
+  sherpa_onnx::KeywordSpotter *kws = nullptr;
+  try {
+    kws = new sherpa_onnx::KeywordSpotter(config);
+  } catch (const std::exception &e) {
+    RethrowCxxExceptionAsJava(env, e, "Failed to create KeywordSpotter");
+    return 0;
+  }
 
   return (jlong)kws;
 }
