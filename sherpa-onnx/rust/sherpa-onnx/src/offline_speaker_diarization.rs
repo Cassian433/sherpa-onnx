@@ -4,11 +4,13 @@
 //! See `rust-api-examples/examples/offline_speaker_diarization.rs`.
 
 use crate::{speaker_embedding::SpeakerEmbeddingExtractorConfig, utils::to_c_ptr};
+use serde::{Deserialize, Serialize};
 use sherpa_onnx_sys as sys;
 use std::ffi::CString;
 use std::slice;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(default)]
 /// Pyannote segmentation model path.
 pub struct OfflineSpeakerSegmentationPyannoteModelConfig {
     pub model: Option<String>,
@@ -37,7 +39,8 @@ impl OfflineSpeakerSegmentationPyannoteModelConfig {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(default)]
 /// Segmentation model configuration for diarization.
 pub struct OfflineSpeakerSegmentationModelConfig {
     pub pyannote: OfflineSpeakerSegmentationPyannoteModelConfig,
@@ -70,7 +73,8 @@ impl OfflineSpeakerSegmentationModelConfig {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(default)]
 /// Fast clustering options used after segmentation and embedding extraction.
 pub struct FastClusteringConfig {
     pub num_clusters: i32,
@@ -98,7 +102,8 @@ impl FastClusteringConfig {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(default)]
 /// Top-level configuration for [`OfflineSpeakerDiarization`].
 pub struct OfflineSpeakerDiarizationConfig {
     pub segmentation: OfflineSpeakerSegmentationModelConfig,
